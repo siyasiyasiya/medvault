@@ -1,56 +1,82 @@
-.dashboardWrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+.page {
+  display: grid;
+  grid-template-rows: 20px 1fr 20px;
+  align-items: center;
+  justify-items: center;
+  min-height: 100vh;
+  padding: 40px;
+  gap: 64px;
+  font-family: var(--font-geist-sans);
+  background-color: #faf9fbf3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gray-rgb: 255, 255, 255;
+    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
+    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+    --button-primary-hover: #ccc;
+    --button-secondary-hover: #1a1a1a;
   }
-  
-  .dashboardTitle {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .userInfo {
-    margin-bottom: 2rem;
-  }
-  
-  .userInfo h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .userInfo p {
-    font-size: 1.1rem;
-  }
-  
-  .actions {
-    margin-bottom: 2rem;
-  }
-  
-  .actions h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .actionButtons {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .button {
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+
+.contentWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.text {
+  text-align: left;
+  flex: 1;
+}
+
+.buttons {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.button {
+  padding: 12px 60px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: #7f3fbf;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: #7f3fbfdb;
+  transform: scale(1.05);
+}
+
+/* Ensure dark mode compatibility */
+@media (prefers-color-scheme: dark) {
   .button:hover {
-    background-color: #005bb5;
+    background-color: #7f3fbfdb;
+    transform: scale(1.05);
   }
-  
-  .logoutSection {
-    margin-top: 2rem;
-  }
-  
+}
+
+.title {
+  font-size: 36px;
+  color: #7f3fbf;
+  text-align: center;
+  margin-bottom: 20px;
+}

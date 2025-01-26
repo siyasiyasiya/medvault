@@ -3,6 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getSession } from '@auth0/nextjs-auth0';
+import PatientUI from '../components/PatientUI';
+import styles from './dashboard.module.css';
 
 export default function Dashboard() {
 //   const { user, isLoading, error } = useUser(); 
@@ -41,15 +43,8 @@ export default function Dashboard() {
   console.log("user:", user);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-
-      {/* Common UI for both account types */}
-      <section>
-        <h2>Welcome to Your Dashboard</h2>
-        <p>Here you can manage your records, interact with healthcare providers, and more.</p>
-      </section>
-
+    <div className={styles.page}>
+      <h1 className={styles.title}>Dashboard</h1>
       {accountType === 'Patient' && <PatientUI user={user} />}
       {accountType === 'Healthcare_Admin' && <HealthcareAdminUI user={user} />}
       {!accountType && (
@@ -71,17 +66,17 @@ function HealthcareAdminUI({ user }) {
   );
 }
 
-// Patient UI Component
-function PatientUI({ user }) {
-  return (
-    <div>
-      <h2>Welcome, {user?.name}</h2>
-      <p>Here you can view and manage your medical records.</p>
-      <button style={buttonStyle}>View Records</button>
-      <button style={buttonStyle}>Request Appointment</button>
-    </div>
-  );
-}
+// // Patient UI Component
+// function PatientUI({ user }) {
+//   return (
+//     <div>
+//       <h2>Welcome, {user?.name}</h2>
+//       <p>Here you can view and manage your medical records.</p>
+//       <button style={buttonStyle}>View Records</button>
+//       <button style={buttonStyle}>Request Appointment</button>
+//     </div>
+//   );
+// }
 
 // Basic inline styling for buttons
 const buttonStyle = {
