@@ -1,9 +1,24 @@
+'use client'
+
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
-import {FaKey, FaGlobe, FaLink, FaUserLock, FaUserPlus, FaHospital, FaShieldAlt} from  "react-icons/fa"
+import {FaKey, FaGlobe, FaLink, FaUserLock, FaUserPlus, FaHospital, FaShieldAlt} from  "react-icons/fa";
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
 
 export default function Home() {
+  const { user } = useUser();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
