@@ -1,0 +1,56 @@
+.dashboardWrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .dashboardTitle {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .userInfo {
+    margin-bottom: 2rem;
+  }
+  
+  .userInfo h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .userInfo p {
+    font-size: 1.1rem;
+  }
+  
+  .actions {
+    margin-bottom: 2rem;
+  }
+  
+  .actions h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .button {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #005bb5;
+  }
+  
+  .logoutSection {
+    margin-top: 2rem;
+  }
+  
