@@ -13,12 +13,12 @@ export default function Home() {
             <h1 className={styles.title}>Empower Your Health Data With <span>MedVault</span></h1>
             <p className={styles.subtitle}>Take full ownership of your medical records. Secure, private, and always in your control.</p>
             <div className={styles.buttons}>
-              <Link href="/api/auth/login" className={styles.button}>
+              <a href="/api/auth/login" className={styles.button}>
                 Get Started
-              </Link>
-              <Link href="/learn-more" className={styles.button}>
+              </a>
+              <a href="/learn-more" className={styles.button}>
                 Learn More
-              </Link>
+              </a>
             </div>
           </div>
           <img src="/logo.png" alt="MedVault Logo" className={styles.logo} />
