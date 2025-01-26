@@ -1,10 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
-import KeyIcon from '@mui/icons-material/Key';
-import PublicIcon from '@mui/icons-material/Public';
-import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
-import HubIcon from '@mui/icons-material/Hub';
+import {FaKey, FaGlobe, FaLink, FaUserLock, FaUserPlus, FaHospital, FaShieldAlt} from  "react-icons/fa"
 
 export default function Home() {
   return (
@@ -32,24 +29,48 @@ export default function Home() {
           <h2 className={styles.featuresTitle}>Why Choose MedVault?</h2>
           <div className={styles.featuresList}>
             <div className={styles.featureItem}>
-              {/* <KeyIcon style={{ fontSize: 80 }}></KeyIcon> */}
+              <FaKey size={80}/>
               <h3>Full Ownership</h3>
               <p>You decide who can access your medical records.</p>
             </div>
             <div className={styles.featureItem}>
-              {/* <HubIcon style={{ fontSize: 80 }}></HubIcon> */}
+              <FaUserLock size={80}/>
               <h3>Decentralized</h3>
               <p>Built on blockchain for unparalleled security.</p>
             </div>
             <div className={styles.featureItem}>
-              {/* <PublicIcon style={{ fontSize: 80 }}></PublicIcon> */}
+              <FaGlobe size={80}></FaGlobe>
               <h3>Global Access</h3>
               <p>Access your data anytime, anywhere.</p>
             </div>
             <div className={styles.featureItem}>
-              {/* <ConnectWithoutContactIcon style={{ fontSize: 80 }}></ConnectWithoutContactIcon> */}
+              <FaLink size={80}></FaLink>
               <h3>Interoperability</h3>
               <p>Seamlessly connect with healthcare providers.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Explainer Section */}
+        <section className={styles.explainerSection}>
+          <h2 className={styles.explainerTitle}>How It Works</h2>
+          <div className={styles.timeline}>
+            <div className={styles.timelineStep}>
+              <FaUserPlus className={styles.icon} />
+              <h3>Sign Up</h3>
+              <p>Create your account and secure your records.</p>
+            </div>
+            <div className={styles.timelineConnector}></div>
+            <div className={styles.timelineStep}>
+              <FaHospital className={styles.icon} />
+              <h3>Connect</h3>
+              <p>Share records with healthcare providers in ease.</p>
+            </div>
+            <div className={styles.timelineConnector}></div>
+            <div className={styles.timelineStep}>
+              <FaShieldAlt className={styles.icon} />
+              <h3>Control</h3>
+              <p>Grant or revoke record access with a single click.</p>
             </div>
           </div>
         </section>
