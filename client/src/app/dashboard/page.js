@@ -51,8 +51,8 @@ export default function Dashboard() {
       </section>
 
       {/* Render different UI based on account_type */}
-      {accountType === 'patient' && <PatientUI user={user} />}
-      {accountType === 'healthcare_admin' && <HealthcareAdminUI user={user} />}
+      {accountType === 'Patient' && <PatientUI user={user} />}
+      {accountType === 'Healthcare_Admin' && <HealthcareAdminUI user={user} />}
       {!accountType && (
         <p>You do not have an account type assigned. Please contact support.</p>
       )}
