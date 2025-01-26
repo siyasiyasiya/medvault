@@ -50,7 +50,6 @@ export default function Dashboard() {
         <p>Here you can manage your records, interact with healthcare providers, and more.</p>
       </section>
 
-      {/* Render different UI based on account_type */}
       {accountType === 'Patient' && <PatientUI user={user} />}
       {accountType === 'Healthcare_Admin' && <HealthcareAdminUI user={user} />}
       {!accountType && (
