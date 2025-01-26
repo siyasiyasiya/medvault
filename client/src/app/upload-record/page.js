@@ -1,109 +1,155 @@
 'use client'
-
-import React, { useState } from 'react';
-import { create } from 'ipfs-http-client';
+import { useState, useEffect } from 'react';
+import Arweave from 'arweave';
 import { ethers } from 'ethers';
 import styles from './uploadrecords.module.css';
 
-// Initialize IPFS client (using Pinata or Infura)
-const ipfsClient = create({
-  url: 'https://ipfs.infura.io:5001/api/v0' // or use Pinata's API URL
-});
-
-export default function UploadRecords() {
-  const [file, setFile] = useState(null);
-  const [description, setDescription] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState("");
+export default function UploadRecords({ user }) {
   const [walletAddress, setWalletAddress] = useState(null);
+  const [file, setFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [isConnected, setIsConnected] = useState(false);
 
-  // Handle file input
-  const handleFileChange = (e) => setFile(e.target.files[0]);
+  // Initialize Arweave client
+  const arweave = Arweave.init({
+    host: 'arweave.net',
+    port: 443,
+    protocol: 'https',
+  });
 
-  // Handle description input
-  const handleDescriptionChange = (e) => setDescription(e.target.value);
+  // Connect to MetaMask
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const userAddress = accounts[0];
+        setWalletAddress(userAddress);
+        setIsConnected(true);
+        alert('Connected with: ' + userAddress);
+      } catch (err) {
+        console.error('Error connecting to MetaMask:', err);
+        alert('Please install MetaMask!');
+      }
+    } else {
+      alert('MetaMask not found. Please install MetaMask!');
+    }
+  };
 
-  // Handle file upload to IPFS
-  const handleUpload = async () => {
+  // Handle file input change
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  // Upload file to Arweave
+  const uploadFileToArweave = async () => {
+    if (!walletAddress) {
+      alert('Please connect your MetaMask wallet first.');
+      return;
+    }
     if (!file) {
       alert('Please select a file to upload.');
       return;
     }
-
-    setIsUploading(true);
-    setUploadStatus('Uploading...');
-
+  
     try {
-      // Upload the file to IPFS
-      const addedFile = await ipfsClient.add(file);
-      const fileHash = addedFile.path; // This is the IPFS CID (hash)
-
-      console.log('File uploaded to IPFS with CID:', fileHash);
-
-      // Call the smart contract to store the IPFS hash and metadata
-      await storeMetadataInSmartContract(fileHash, description);
-      
-      setUploadStatus('Upload successful!');
-    } catch (error) {
-      console.error('Upload failed:', error);
-      setUploadStatus('Upload failed. Please try again.');
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  // Call the smart contract to store the IPFS hash and description
-  const storeMetadataInSmartContract = async (fileHash, description) => {
-    const provider = new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");
-    const wallet = new ethers.Wallet('YOUR_WALLET_PRIVATE_KEY', provider);
-    const contractAddress = 'YOUR_CONTRACT_ADDRESS';
-    const abi = [ /* ABI array of storeRecord method */ ];
-
-    const contract = new ethers.Contract(contractAddress, abi, wallet);
-
-    try {
-      const tx = await contract.storeRecord(fileHash, description);
-      console.log('Smart contract transaction:', tx);
-      await tx.wait();  // Wait for transaction to be mined
-      console.log('Record successfully stored in smart contract!');
-    } catch (error) {
-      console.error('Failed to store metadata in smart contract:', error);
+      setUploadStatus('Uploading file to Arweave...');
+      setProgress(0);
+  
+      // Convert file to ArrayBuffer
+      const fileBuffer = await file.arrayBuffer();
+      const fileData = new Uint8Array(fileBuffer);
+  
+      // Create Arweave transaction
+      const transaction = await arweave.createTransaction({ data: fileData });
+      transaction.addTag('Content-Type', file.type);
+  
+      // Prepare the data for MetaMask signing
+      const transactionData = JSON.stringify({
+        data: Array.from(transaction.data),
+        tags: transaction.tags.map((tag) => ({
+          name: tag.get('name', { decode: true, string: true }),
+          value: tag.get('value', { decode: true, string: true }),
+        })),
+      });
+  
+      // Request MetaMask signature
+      const signedTransaction = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [transactionData, walletAddress],
+      });
+  
+      // Attach signature to the transaction
+      transaction.setSignature({
+        owner: walletAddress,
+        signature: signedTransaction,
+      });
+  
+      // Post transaction to Arweave
+      const uploader = await arweave.transactions.getUploader(transaction);
+  
+      // Track upload progress
+      while (!uploader.isComplete) {
+        await uploader.uploadChunk();
+        setProgress((uploader.pctComplete || 0).toFixed(2));
+      }
+  
+      if (uploader.isComplete) {
+        const fileURL = `https://arweave.net/${transaction.id}`;
+        setUploadStatus(`File uploaded successfully: ${fileURL}`);
+      } else {
+        setUploadStatus('Failed to upload file.');
+      }
+    } catch (err) {
+      console.error('Error uploading file to Arweave:', err);
+      setUploadStatus('Error occurred during file upload.');
     }
   };
 
   return (
     <div className={styles.uploadContainer}>
-      <h1 className={styles.heading}>Upload Medical Record</h1>
-
+      <h1 className={styles.heading}>Welcome, {user?.name}</h1>
       <div className={styles.walletConnect}>
-        <p>Wallet connected: {walletAddress}</p>
-      </div>
-
-      <div className={styles.uploadFormContainer}>
-        <p>Choose a file to upload:</p>
-        <input
-          type="file"
-          className={styles.fileInput}
-          onChange={handleFileChange}
-        />
-        <textarea
-          className={styles.textarea}
-          placeholder="Enter description for the record"
-          value={description}
-          onChange={handleDescriptionChange}
-        />
-        <button
-          className={styles.uploadButton}
-          onClick={handleUpload}
-          disabled={isUploading}
-        >
-          {isUploading ? 'Uploading...' : 'Upload'}
-        </button>
-
-        {uploadStatus && (
-          <p className={styles.uploadStatus}>{uploadStatus}</p>
+        {!walletAddress ? (
+          <button
+            onClick={connectWallet}
+            className={styles.connectButton}
+          >
+            Connect MetaMask
+          </button>
+        ) : (
+          <p>Wallet connected: {walletAddress}</p>
         )}
       </div>
+
+      {walletAddress && (
+        <div className={styles.uploadFormContainer}>
+          <p>Select a file to upload to Arweave:</p>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className={styles.fileInput}
+          />
+          <button
+            onClick={uploadFileToArweave}
+            className={styles.uploadButton}
+            disabled={!file}
+          >
+            Upload File
+          </button>
+          {progress > 0 && (
+            <div className={styles.progressBarContainer}>
+              <div
+                className={styles.progressBar}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {uploadStatus && <p className={styles.successMessage}>{uploadStatus}</p>}
     </div>
   );
 }
