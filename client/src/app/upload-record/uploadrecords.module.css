@@ -1,0 +1,139 @@
+.uploadContainer {
+    text-align: center;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Heading styling */
+.heading {
+    font-size: 2.5rem;
+    color: #6a4c9c; /* Purple */
+    margin-bottom: 20px;
+}
+
+/* Wallet connection section */
+.walletConnect {
+    margin-bottom: 20px;
+}
+
+/* MetaMask Connect Button */
+.connectButton {
+    background-color: #9b59b6; /* Purple */
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for connect button */
+.connectButton:hover {
+    background-color: #8e44ad; /* Darker Purple */
+}
+
+/* Upload form container styling */
+.uploadFormContainer {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f2f0f8; /* Light purple background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Paragraph inside the form container */
+.uploadFormContainer p {
+    color: #6a4c9c; /* Purple */
+    margin-bottom: 15px;
+}
+
+/* File input styling */
+.fileInput {
+    display: block;
+    margin: 10px auto;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 100%;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+/* File input hover effect */
+.fileInput:hover {
+    border-color: #9b59b6; /* Purple */
+}
+
+/* Textarea for description */
+.textarea {
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    resize: vertical; /* Allows resizing of the textarea */
+}
+
+/* Textarea placeholder styling */
+textarea::placeholder {
+    color: #888;
+}
+
+/* Upload button styling */
+.uploadButton {
+    background-color: #9b59b6; /* Purple */
+    color: white;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    width: 100%;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+/* Upload button disabled state */
+.uploadButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Hover effect for the upload button */
+.uploadButton:hover:enabled {
+    background-color: #8e44ad; /* Darker Purple */
+}
+
+/* Success message */
+.successMessage {
+    color: #28a745; /* Green for success */
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Progress bar for upload status */
+.progressBarContainer {
+    width: 100%;
+    height: 8px;
+    background-color: #ddd;
+    margin-top: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progressBar {
+    height: 100%;
+    width: 0;
+    background-color: #9b59b6; /* Purple */
+    transition: width 0.3s ease;
+}

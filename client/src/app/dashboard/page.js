@@ -5,12 +5,17 @@ import { useEffect, useState } from 'react';
 import { getSession } from '@auth0/nextjs-auth0';
 import PatientUI from '../components/PatientUI';
 import styles from './dashboard.module.css';
+import { ethers } from 'ethers';
+import { toast,ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Dashboard() {
 //   const { user, isLoading, error } = useUser(); 
   const router = useRouter();
   const [accountType, setAccountType] = useState(null);
   const [user, setUser] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [address, setAddress] = useState(null);
 //   if (isLoading) {
 //     return <p>Loading...</p>;
 //   }
@@ -19,6 +24,25 @@ export default function Dashboard() {
 //     console.error(error);
 //     return <p>Error fetching user data.</p>;
 //   }
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const userAddress = await signer.getAddress();
+        setAccount(userAddress);
+        setIsConnected(true);
+        alert('Connected with: ' + userAddress);
+      } catch (err) {
+        console.error('Error connecting to MetaMask:', err);
+        alert('Please install MetaMask!');
+      }
+    } else {
+      alert('MetaMask not found. Please install MetaMask!');
+    }
+  };
 
   useEffect(() => {
     const fetchUserSession = async () => {
